@@ -9,7 +9,7 @@ export class DoctorServiceService {
   constructor() { }
 
   addDoctorData(formData: any) {
-    const data = this.getFullDoctorData();
+    let data = this.getFullDoctorData();
     data.push(formData);
     localStorage.setItem('doctorData', JSON.stringify(data));
   }
@@ -24,14 +24,36 @@ export class DoctorServiceService {
   }
 
   deleteDoctorData(id: any) {
-    const doctorData = this.getFullDoctorData();
-    const data = doctorData.filter((res: any) => res.id != id);
+    let data = this.getFullDoctorData();
+    data = data.filter((res: any) => res.id != id);
     localStorage.setItem('doctorData', JSON.stringify(data));
   }
 
   getFullDoctorData() {
     const data = localStorage.getItem('doctorData');
     return data ? JSON.parse(data) : [];
+  }
+
+  getDoctorData(specialization:string, doctorName:string, pageNo:number, pageSize: number){
+    const data = this.getFullDoctorData();
+    let filterData = [];
+    if(specialization && doctorName){
+      filterData = data.filter((res:any)=> res?.specialization == specialization && res?.name.toLowerCase().includes(doctorName.toLowerCase()));
+    }else if(doctorName){
+      filterData = data.filter((res:any)=> res?.name.toLowerCase().includes(doctorName.toLowerCase()));
+    }else if(specialization){
+      filterData = data.filter((res:any)=> res?.specialization == specialization);
+    }else{
+      filterData = data;
+    }
+    
+    const totalElements = filterData.length;
+    const offset = pageNo * pageSize;
+    const doctorData = filterData.slice(offset, offset + pageSize);
+    return {
+      data : doctorData,
+      totalElements
+    }
   }
 
   getSpecializationData() {

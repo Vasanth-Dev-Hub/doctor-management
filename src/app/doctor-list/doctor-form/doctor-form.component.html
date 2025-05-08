@@ -53,8 +53,8 @@
                             [class.is-invalid]="doctorForm.get('status')?.touched && doctorForm.get('status')?.invalid && doctorForm.get('status')?.errors?.['required']"
                             [attr.disabled]="action === 'VIEW' ? true : null" aria-label="Doctor status" id="status"
                             formControlName="status">
-                            <option [value]="true">Active</option>
-                            <option [value]="false">Inactive</option>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
                         </select>
                     </div>
                 </div>

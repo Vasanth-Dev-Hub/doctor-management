@@ -21,7 +21,7 @@ export class DoctorFormComponent implements OnInit, OnChanges {
       name: [null, [Validators.required]],
       specialization: [null, [Validators.required]],
       contact: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(15), Validators.pattern(/^[0-9]+$/)]],
-      status: [true, [Validators.required]]
+      status: ['true', [Validators.required]]
     })
   }
 
