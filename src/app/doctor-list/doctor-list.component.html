@@ -65,7 +65,7 @@
         </div>
     </div>
     <div class="d-flex justify-content-end">
-        <mat-paginator class="w-100" *ngIf="doctorListData?.data?.length > 0" [pageIndex]="pageNo" [length]="doctorListData?.totalElements"  [pageSizeOptions]="[10,20,30,40,50]" [pageSize]="pageSize" (page)="pageEvent($event)" showFirstLastButtons>
+        <mat-paginator class="w-100" [pageIndex]="pageNo" [length]="doctorListData?.totalElements"  [pageSizeOptions]="[10,20,30,40,50]" [pageSize]="pageSize" (page)="pageEvent($event)" showFirstLastButtons>
         </mat-paginator>
     </div>
 </div>
