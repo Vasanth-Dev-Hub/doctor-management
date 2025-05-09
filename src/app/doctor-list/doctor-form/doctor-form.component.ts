@@ -64,6 +64,6 @@ export class DoctorFormComponent implements OnInit, OnChanges {
   closeModal(formSave: boolean) {
     this.doctorFormSubmit.emit(formSave);
     this.doctorForm.reset();
-    this.doctorForm.get('status')?.setValue(true);
+    this.doctorForm.get('status')?.setValue('true');
   }
 }
