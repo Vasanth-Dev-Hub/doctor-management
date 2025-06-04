@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DoctorServiceService } from '../../doctorService/doctor-service.service';
 
 @Component({
@@ -21,7 +21,13 @@ export class DoctorFormComponent implements OnInit, OnChanges {
       name: [null, [Validators.required]],
       specialization: [null, [Validators.required]],
       contact: [null, [Validators.required, Validators.minLength(10), Validators.maxLength(15), Validators.pattern(/^[0-9]+$/)]],
-      status: ['true', [Validators.required]]
+      status: ['true', [Validators.required]],
+      address: this.fb.group({
+        street:[null],
+        city:[null],
+        pincode:[null]
+      }),
+      specialties: this.fb.array([this.fb.control("")])
     })
   }
 
@@ -44,6 +50,17 @@ export class DoctorFormComponent implements OnInit, OnChanges {
     this.doctorForm.get('specialization')?.setValue(this.data?.specialization);
     this.doctorForm.get('contact')?.setValue(this.data?.contact);
     this.doctorForm.get('status')?.setValue(this.data?.status);
+    for(let key of Object.keys(this.data?.address)){
+      this.doctorForm.get(`address.${key}`)?.setValue(this.data?.address[key])
+    }
+    if(this.data?.specialties && this.data?.specialties.length > 0){
+      this.data?.specialties.forEach((res:any,index:number) => {
+        if(index != 0){
+          this.addSpl();
+        }
+      });
+      this.spl.setValue(this.data?.specialties)
+    }
   }
 
   saveDoctorDetails() {
@@ -65,5 +82,21 @@ export class DoctorFormComponent implements OnInit, OnChanges {
     this.doctorFormSubmit.emit(formSave);
     this.doctorForm.reset();
     this.doctorForm.get('status')?.setValue('true');
+    const array = this.spl.controls;
+    for (let i = array.length - 1; i > 0; i--) {
+        this.removeSpl(i);
+    }
+  }
+
+  get spl(){
+    return this.doctorForm.get("specialties") as FormArray;
+  }
+
+  addSpl(){
+    this.spl.push(this.fb.control(""))
+  }
+
+  removeSpl(index:number){
+    this.spl.removeAt(index)
   }
 }
